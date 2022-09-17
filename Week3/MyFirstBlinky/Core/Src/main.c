@@ -58,17 +58,12 @@ int waitedInMS = 0;
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-    if(GPIO_Pin == GPIO_PIN_0) // INT Source is pin A0
-    {
-    	if(buttonShallBlink){
-    		buttonShallBlink = false;
-    	}
-    	else {
-    		buttonShallBlink = true;
-    	}
-    	waitedInMS = 0;
-    	HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13); // Toggle LED
-    }
+  if(GPIO_Pin == GPIO_PIN_0) // INT Source is pin A0
+  {
+   	buttonShallBlink = !buttonShallBlink;
+   	waitedInMS = 0;
+   	HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13); // Toggle LED
+  }
 }
 /* USER CODE END 0 */
 
@@ -109,12 +104,14 @@ int main(void)
   while (1)
   {
 	if(buttonShallBlink && waitedInMS == 0){
-		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13); // Toggle LED
+	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13); // Toggle LED
 	}
 	HAL_Delay(1);
 	waitedInMS++;
-	if(waitedInMS >= 1000)
-      waitedInMS = 0;
+	if(waitedInMS >= 1000){
+	  waitedInMS = 0;
+	}
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
